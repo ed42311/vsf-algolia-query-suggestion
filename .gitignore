@@ -1,0 +1,8 @@
+node_modules
+.nuxt
+
+cypress/videos
+cypress/screenshots
+coverage
+
+*.DS_Store
