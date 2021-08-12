@@ -1,46 +1,17 @@
 <template>
   <div>
-    <!-- <AisAutocomplete>
-    <div slot-scope="{ currentRefinement, indices, refine }">
-      <div v-if="currentRefinement">
-        <input
-          type="search"
-          :value="currentRefinement"
-          placeholder="Search for a product"
-          @input="refine($event.currentTarget.value)"
-        />
-        <ul v-for="index in indices" :key="index.indexId">
-          <li>
-            <h3>{{ index.indexName }}</h3>
-            <ul>
-              <li v-for="hit in index.hits" :key="hit.objectID">
-                <ais-highlight attribute="name" :hit="hit" />
-                <button
-                  type="button"
-                  @click="index.sendEvent('click', hit, 'Item Added')"
-                >
-                  Add to cart
-                </button>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </AisAutocomplete> -->
     <AisHits />
   </div>
 </template>
 
 <script>
-import { AisSearchBox, AisHits } from 'vue-instantsearch';
+import { AisHits } from 'vue-instantsearch';
 
 export default {
   layout() {
     return 'basic';
   },
   components: {
-    AisSearchBox,
     AisHits,
   },
 };

@@ -1,6 +1,7 @@
 import webpack from 'webpack';
 
 export default {
+  components: true,
   server: {
     port: 3003,
     host: '0.0.0.0',
