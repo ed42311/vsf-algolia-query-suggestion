@@ -131,7 +131,11 @@ export default {
     ],
   },
   build: {
-    transpile: ['vee-validate/dist/rules'],
+    transpile: [
+      'vee-validate/dist/rules',
+      'vue-instantsearch',
+      'instantsearch.js/es',
+    ],
     plugins: [
       new webpack.DefinePlugin({
         'process.VERSION': JSON.stringify({
@@ -144,6 +148,13 @@ export default {
   },
   router: {
     middleware: ['checkout'],
+    parseQuery(queryString) {
+      return require('qs').parse(queryString);
+    },
+    stringifyQuery(object) {
+      var queryString = require('qs').stringify(object);
+      return queryString ? '?' + queryString : '';
+    },
     extendRoutes(routes) {
       for (const route of routes) {
         if (route.path.includes('/Search')) {
