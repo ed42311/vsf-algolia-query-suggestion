@@ -43,6 +43,35 @@ export default {
   },
   loading: { color: '#fff' },
   plugins: [],
+  env: {
+    algoliaAppId: 'H9ZUJZIP4J',
+    algoliaApiKey: '0491e81cb21a934b9d37e559a19cb875',
+    algoliaMainIndexReplicaPriceAscPostfix: '--price-asc',
+    algoliaMainIndexReplicaPriceDescPostfix: '--price-desc',
+    algoliaMainIndexReplicaNewPostfix: '--new',
+    algoliaMainIndexName: (() => {
+      switch (process.env.NODE_ENV) {
+        case 'production':
+          return 'spryker_staging_murdochs_products';
+        // TBD
+        // case "staging":
+        //   return "preproduction_murdochs_variants"
+        default:
+          return 'spryker_dev_murdochs_products';
+      }
+    })(),
+    algoliaQuerySuggestionIndexName: (() => {
+      switch (process.env.NODE_ENV) {
+        case 'production':
+          return 'spryker_staging_murdochs_products_query_suggestions';
+        // TBD
+        // case "staging":
+        //   return "preproduction_murdochs_variants_query_suggestions"
+        default:
+          return 'spryker_dev_murdochs_products_query_suggestions';
+      }
+    })(),
+  },
   buildModules: [
     // to core
     '@nuxt/typescript-build',
@@ -136,6 +165,7 @@ export default {
       'vee-validate/dist/rules',
       'vue-instantsearch',
       'instantsearch.js/es',
+      // '@storefront-ui/vue', Does this solve the nesting problem?
     ],
     plugins: [
       new webpack.DefinePlugin({

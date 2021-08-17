@@ -1,31 +1,157 @@
 <template>
   <div>
-    <AisHits />
+    <div class="navbar section">
+      <div class="navbar__aside desktop-only">
+        <SfHeading
+          data-cy="svsf-categorySection-categories-heading"
+          :level="3"
+          :title="$t('Search')"
+          class="navbar__title"
+        />
+      </div>
+      <div class="navbar__main">
+        <!-- <SfButton
+          data-cy="svsf-categorySection-filters-button"
+          class="sf-button--text navbar__filters-button"
+          aria-label="Filters"
+          @click="toggleFilterSidebar"
+        >
+          <SfIcon
+            data-cy="svsf-categorySection-filter-icon"
+            size="18px"
+            color="dark-secondary"
+            icon="filter"
+            class="navbar__filters-icon"
+          />
+          {{ $t('Filters') }}
+        </SfButton> -->
+        <div class="navbar__sort desktop-only">
+          <span class="navbar__label">{{ $t('Sort by') }}:</span>
+          <!-- <SfSelect
+            data-cy="svsf-categorySection-sortBy-select"
+            class="navbar__select"
+            :value="sortBy.selected"
+            placeholder="select sorting"
+            @input="th.changeSorting"
+          >
+            <SfSelectOption
+              :data-cy="``"
+              v-for="option in sortBy.options"
+              :key="option.id"
+              :value="option.id"
+              :selected="option.id === sortBy.selected"
+              class="sort-by__option"
+              >{{ option.value }}</SfSelectOption
+            >
+          </SfSelect> -->
+        </div>
+        <div class="navbar__counter">
+          <AisStats>
+            <template slot-scope="{ nbHits }">
+              <span class="navbar__label desktop-only"
+                >{{ $t('Products found') }}:
+              </span>
+              <span
+                data-cy="algolia_hits-counter-text--desktop"
+                class="desktop-only"
+                >{{ nbHits }}</span
+              >
+              <span class="navbar__label smartphone-only">
+                {{ 100 }} {{ $t('Items') }}
+              </span>
+              <span
+                data-cy="algolia_hits-counter-text--mobile"
+                class="navbar__label smartphone-only"
+                >{{ nbHits }} {{ $t('Items') }}</span
+              >
+            </template>
+          </AisStats>
+        </div>
+        <div class="navbar__view">
+          <span class="navbar__view-label desktop-only">{{ $t('View') }}</span>
+          <SfIcon
+            data-cy="svsf-categorySection-tiles-icon"
+            class="navbar__view-icon"
+            :color="isCategoryGridView ? 'black' : 'dark-secondary'"
+            icon="tiles"
+            size="12px"
+            role="button"
+            aria-label="Change to grid view"
+            :aria-pressed="isCategoryGridView"
+            @click="toggleCategoryGridView"
+          />
+          <SfIcon
+            data-cy="svsf-categorySection-list-icon"
+            class="navbar__view-icon"
+            :color="!isCategoryGridView ? 'black' : 'dark-secondary'"
+            icon="list"
+            size="12px"
+            role="button"
+            aria-label="Change to list view"
+            :aria-pressed="!isCategoryGridView"
+            @click="toggleCategoryGridView"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="main section">
+      <div class="products">
+        <AisHits :class-names="{ 'ais-Hits-item': 'override_Hits-item' }">
+          <div slot="item" slot-scope="{ item }">
+            <SfProductCard
+              :key="item.objectID"
+              data-cy="category-product-card"
+              :title="item.name"
+              :image="item.image"
+              :max-rating="5"
+              :is-on-wishlist="false"
+              class="products__product-card"
+            />
+          </div>
+        </AisHits>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { AisHits } from 'vue-instantsearch';
+import {
+  SfButton,
+  SfIcon,
+  SfHeading,
+  SfProductCard,
+  SfSelect,
+} from '@storefront-ui/vue';
+import {
+  AisInstantSearchSsr,
+  AisSearchBox,
+  AisHits,
+  AisStats,
+} from 'vue-instantsearch';
+import { useUiState } from '~/composables';
 
 export default {
-  layout() {
-    return 'basic';
+  setup() {
+    const uiState = useUiState();
+    return {
+      ...uiState,
+    };
   },
   components: {
+    AisSearchBox,
     AisHits,
+    AisStats,
+    SfButton,
+    SfIcon,
+    SfHeading,
+    SfSelect,
+    SfProductCard,
   },
 };
 </script>
 
 <style lang="scss">
 @import '~@storefront-ui/vue/styles';
-#search {
-  box-sizing: border-box;
-  @include for-desktop {
-    max-width: 1240px;
-    margin: 0 auto;
-  }
-}
 .main {
   &.section {
     padding: var(--spacer-xs);

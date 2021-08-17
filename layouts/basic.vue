@@ -1,11 +1,11 @@
 <template>
-  <AisInstantSearchSsr>
-    <div id="basic" class="app-container">
-      <h1>Autocomplete Test</h1>
-      <QuerySuggestions />
+  <div id="basic" class="app-container">
+    <h1>Autocomplete Test</h1>
+    <QuerySuggestions />
+    <AisInstantSearchSsr>
       <nuxt />
-    </div>
-  </AisInstantSearchSsr>
+    </AisInstantSearchSsr>
+  </div>
 </template>
 
 <script>
@@ -18,6 +18,12 @@ const searchClient = algoliasearch(
   'latency',
   '6be0576ff61c053d5f9a3225e2a90f76',
 );
+
+// const indexName = 'spryker_dev_murdochs_products';
+// const searchClient = algoliasearch(
+//   'H9ZUJZIP4J',
+//   '0491e81cb21a934b9d37e559a19cb875',
+// );
 
 // remove indexName
 // Props to: https://code.luasoftware.com/tutorials/algolia/setup-algolia-instantsearch-on-nuxt-with-query-url/
@@ -77,9 +83,6 @@ function nuxtRouter(vueRouter) {
 
 export default {
   name: 'BasicLayout',
-  layout() {
-    return 'basic';
-  },
   serverPrefetch() {
     return this.instantsearch.findResultsState(this).then(algoliaState => {
       this.$ssrContext.nuxt.algoliaState = algoliaState;
@@ -89,6 +92,9 @@ export default {
     const results =
       this.$nuxt.context.nuxtState.algoliaState || window.__NUXT__.algoliaState;
     this.instantsearch.hydrate(results);
+
+    delete this.$nuxt.context.nuxtState.algoliaState;
+    delete window.__NUXT__.algoliaState;
   },
   data() {
     const mixin = createServerRootMixin({
